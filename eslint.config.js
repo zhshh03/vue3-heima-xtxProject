@@ -24,4 +24,9 @@ export default defineConfig([
   ...pluginVue.configs['flat/essential'],
 
   ...pluginOxlint.buildFromOxlintConfigFile('.oxlintrc.json'),
+  {
+    rules: {
+      'vue/multi-word-component-names': 'off',
+    },
+  },
 ])
