@@ -5,3 +5,15 @@ export const getBannerAPI = () => {
     url:'/home/banner'
   })
 }
+
+export const getNewAPI = () => {
+  return httpInstance({
+    url: '/home/new'
+  })
+}
+
+export const getHotAPI = () => {
+  return httpInstance({
+    url: '/home/hot'
+  })
+}
