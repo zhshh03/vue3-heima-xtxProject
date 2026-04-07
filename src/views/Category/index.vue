@@ -2,6 +2,7 @@
 import { getCategoryAPI } from "@/apis/category";
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import { getBannerAPI } from '@/apis/home'
 
 const route = useRoute()
 
@@ -10,8 +11,17 @@ const getCategoryData = async () => {
   const res = await getCategoryAPI(route.params.id)
   getCategory.value = res.data.result
 }
+
+const bannerList = ref([])
+  const getBanner = async () => {
+    const res = await getBannerAPI({
+      distributionSite: 2
+    })
+    bannerList.value = res.data.result
+  }
 onMounted(() => {
   getCategoryData()
+  getBanner()
 })
 </script>
 
@@ -25,6 +35,14 @@ onMounted(() => {
           <el-breadcrumb-item>{{ getCategory.name }}</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
+      <div class="home-banner">
+        <el-carousel height="500px">
+          <el-carousel-item v-for="item in bannerList" :key="item.id">
+            <img v-img-lazy="item.imgUrl" alt="">
+          </el-carousel-item>
+        </el-carousel>
+      </div>
+
     </div>
   </div>
 </template>
@@ -106,6 +124,15 @@ onMounted(() => {
 
   .bread-container {
     padding: 25px 0;
+  }
+}
+.home-banner {
+  width: 1240px;
+  height: 500px;
+
+  img {
+    width: 100%;
+    height: 500px;
   }
 }
 </style>
