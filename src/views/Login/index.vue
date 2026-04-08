@@ -1,10 +1,14 @@
 <script setup>
 import { ref } from 'vue'
+import 'element-plus/theme-chalk/el-message.css'
+import { ElMessage } from 'element-plus'
+import { loginAPI } from '@/apis/user'
+import { useRouter } from 'vue-router'
 
 const form = ref({
   account:'',
   password:'',
-  agree:true
+  agree:false
 })
 
 const rules = {
@@ -18,14 +22,34 @@ const rules = {
   agree:[
    {
     validator: (rules,value, callback) => {
-      if(value) {
-        callback()
-      } else {
+      if(!value) {
         callback(new Error('请勾选同意协议'))
+      } else {
+        callback()
       }
     }
    } 
   ]
+}
+const router = useRouter()
+const loginForm = ref(null)
+const doLongin = () => {
+  const { account, password, agree } = form.value
+  loginForm.value.validate( async(valid) => {
+    if(valid) {
+      await loginAPI({account,password})
+      ElMessage({
+      message: '登录成功',
+      type: 'success',
+     })
+     router.replace('/')
+    } else {
+      ElMessage({
+        message: agree ? '账号或者密码格式错误' : '请同意协议',
+        type: 'error',
+       })
+    }
+  })
 }
 </script>
 
@@ -51,7 +75,7 @@ const rules = {
         </nav>
         <div class="account-box">
           <div class="form">
-            <el-form :model="form" :rules="rules" label-position="right" label-width="60px"
+            <el-form ref="loginForm" :model="form" :rules="rules" label-position="right" label-width="60px"
               status-icon>
               <el-form-item prop="account" label="账户">
                 <el-input v-model="form.account"/>
@@ -64,7 +88,7 @@ const rules = {
                   我已同意隐私条款和服务条款
                 </el-checkbox>
               </el-form-item>
-              <el-button size="large" class="subBtn">点击登录</el-button>
+              <el-button size="large" class="subBtn" @click="doLongin">点击登录</el-button>
             </el-form>
           </div>
         </div>
