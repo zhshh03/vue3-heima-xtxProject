@@ -9,9 +9,8 @@ const route = useRoute()
 const goods = ref({})
 const getDetail = async () => {
   const res = await getDetailAPI(route.params.id)
-  // console.log(res.data.result)
-  
   goods.value = res.data.result
+  
 }
 
 onMounted(() => {
@@ -39,7 +38,7 @@ onMounted(() => {
           <div class="goods-info">
             <div class="media">
               <!-- 图片预览区 -->
-              <ImageView></ImageView>
+              <ImageView :image-list="goods.mainPictures"></ImageView>
               <!-- 统计数量 -->
               <ul class="goods-sales">
                 <li>

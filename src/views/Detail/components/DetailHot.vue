@@ -26,8 +26,6 @@ const getHotGoods = async () => {
     type: props.hotType,
     limit:3
   })
-  console.log(res)
-  
   hotGoods.value = res.data.result
 }
 
