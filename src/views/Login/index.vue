@@ -4,7 +4,7 @@ import { ref } from 'vue'
 const form = ref({
   account:'',
   password:'',
-  agree:false
+  agree:true
 })
 
 const rules = {
@@ -15,6 +15,17 @@ const rules = {
     { required:true, message:'请输入密码', trigger:'blur' },
     { min:6, max:14,message:'密码长度必须在6-14个字符之间', trigger:'blur' }
   ],
+  agree:[
+   {
+    validator: (rules,value, callback) => {
+      if(value) {
+        callback()
+      } else {
+        callback(new Error('请勾选同意协议'))
+      }
+    }
+   } 
+  ]
 }
 </script>
 
@@ -48,8 +59,8 @@ const rules = {
               <el-form-item prop="password" label="密码">
                 <el-input v-model="form.password" type="password"/>
               </el-form-item>
-              <el-form-item label-width="22px">
-                <el-checkbox  size="large">
+              <el-form-item prop="agree" label-width="22px">
+                <el-checkbox v-model="form.agree" size="large">
                   我已同意隐私条款和服务条款
                 </el-checkbox>
               </el-form-item>
