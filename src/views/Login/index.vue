@@ -2,8 +2,10 @@
 import { ref } from 'vue'
 import 'element-plus/theme-chalk/el-message.css'
 import { ElMessage } from 'element-plus'
-import { loginAPI } from '@/apis/user'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
+
+const userStore = useUserStore()
 
 const form = ref({
   account:'',
@@ -37,7 +39,7 @@ const doLongin = () => {
   const { account, password, agree } = form.value
   loginForm.value.validate( async(valid) => {
     if(valid) {
-      await loginAPI({account,password})
+      await userStore.getUserInfo({account,password})
       ElMessage({
       message: '登录成功',
       type: 'success',
