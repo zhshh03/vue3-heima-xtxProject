@@ -1,6 +1,7 @@
 <script setup>
   import { useScroll } from '@vueuse/core'
   import { useCategoryStore } from '@/stores/category'
+  import HeaderCart from './HeaderCart.vue'
   //使用vueuse监听滚动事件，获取滚动距离
   const { y } = useScroll(window)
 
@@ -26,6 +27,7 @@
         <RouterLink to="/">品牌</RouterLink>
         <RouterLink to="/">专题</RouterLink>
       </div>
+      <HeaderCart></HeaderCart>
     </div>
   </div>
 </template>
