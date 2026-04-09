@@ -2,6 +2,7 @@ import axios  from "axios";
 import 'element-plus/theme-chalk/el-message.css'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores/user'
+import router from '@/router'
 
 // 创建一个axios实例
 const httpInstance = axios.create({
@@ -12,7 +13,7 @@ const httpInstance = axios.create({
 // 添加请求拦截器
 httpInstance.interceptors.request.use(function (config) {
     // 在发送请求之前做些什么
-    const userStore = useUserStore();
+    const userStore = useUserStore()
     if(userStore.userInfo.token) {
       config.headers.Authorization = `Bearer ${userStore.userInfo.token}`
     }
@@ -30,6 +31,16 @@ httpInstance.interceptors.response.use(function (response) {
   }, function (error) {
     // 超出 2xx 范围的状态码都会触发该函数。
     // 对响应错误做点什么
+    const userStore = useUserStore()
+    if(error.response.status === 401) {
+      userStore.clearUserInfo()
+      router.replace('/login')
+      ElMessage({
+        type:'warning',
+        message:'登录状态无效，请重新登录'
+      })
+      return Promise.reject(error);
+    }
       ElMessage({
         type:'warning',
         message:error.response.data.message
