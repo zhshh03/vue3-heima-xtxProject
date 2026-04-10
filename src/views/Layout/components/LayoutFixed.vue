@@ -1,6 +1,6 @@
 <script setup>
   import { useScroll } from '@vueuse/core'
-  import { useCategoryStore } from '@/stores/category'
+  import { useCategoryStore } from '@/stores/categoryStore'
   import HeaderCart from './HeaderCart.vue'
   //使用vueuse监听滚动事件，获取滚动距离
   const { y } = useScroll(window)
