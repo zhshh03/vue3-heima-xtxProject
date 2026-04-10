@@ -40,8 +40,12 @@ export const useCartStore = defineStore('cart', () => {
       const index = cartList.value.findIndex(item => item.skuId === skuId)
     cartList.value.splice(index, 1)
     }
-    
   }
+  //清除购物车数据
+  const clearCart = () => {
+    cartList.value = []
+  }
+
   // 计算总数量和总价格
   const totalCount = computed(() => cartList.value.reduce((total, item) => total + item.count, 0))
   const totalPrice = computed(() => cartList.value.reduce((total, item) => total + item.count * item.price, 0))
@@ -69,7 +73,8 @@ export const useCartStore = defineStore('cart', () => {
     isAll,
     allCheck,
     selectCount,
-    selectPrice
+    selectPrice,
+    clearCart
   }
 },{
   persist: true
