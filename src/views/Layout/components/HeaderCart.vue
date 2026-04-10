@@ -6,9 +6,9 @@ const cartStore = useCartStore()
 </script>
 
 <template>
-  <div class="cart">
-    <a class="curr" href="javascript:;">
-      <i class="iconfont icon-cart"></i><em>{{ cartStore.cartList.length }}</em>
+  <div class="cart" >
+    <a class="curr" href="javascript:;" @click="router.push('/cart')">
+      <i class="iconfont icon-cart" ></i><em>{{ cartStore.cartList.length }}</em>
     </a>
     <div class="layer">
       <div class="list">
