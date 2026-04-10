@@ -1,6 +1,11 @@
 <script setup>
-import { getCheckoutInfoAPI } from '@/apis/checkout'
+import { getCheckoutInfoAPI,createOrderAPI } from '@/apis/checkout'
 import { ref, onMounted} from 'vue';
+import { useRouter } from 'vue-router';
+import { useCartStore } from '@/stores/cartStore'; 
+
+const cartStore = useCartStore()
+const router = useRouter()
 const checkInfo = ref({})  // 订单对象
 const curAddress = ref({})  // 地址对象
 
@@ -21,6 +26,59 @@ const switchAddress = (item) => {
 const confirm = () => {
   curAddress.value = activeAddress.value
   showDialog.value = false
+}
+
+const selected1 = ref(false)
+const selected2 = ref(false)
+const selected3 = ref(false)
+const selected4 = ref(false)
+const selected5 = ref(false)
+const change1 = () => {
+  selected1.value = true
+  selected2.value = false
+  selected3.value = false
+}
+const change2 = () => {
+  selected1.value = false
+  selected2.value = true
+  selected3.value = false
+}
+const change3 = () => {
+  selected1.value = false
+  selected2.value = false
+  selected3.value = true
+}
+const change4 = () => {
+  selected4.value = true
+  selected5.value = false
+}
+const change5 = () => {
+  selected4.value = false
+  selected5.value = true
+}
+
+const createOrder = async () => {
+  const res = await createOrderAPI({
+    deliveryTimeType: 1,
+    payType: 1,
+    payChannel: 1,
+    buyerMessage: '',
+    goods: checkInfo.value.goods.map(item => {
+      return {
+        skuId: item.skuId,
+        count: item.count
+      }
+    }),
+    addressId: curAddress.value.id
+  })
+  const orderId = res.data.result.id
+  router.push({
+    path: '/pay',
+    query: {
+      id: orderId
+    }
+  })
+  cartStore.updateNewList()
 }
 
 onMounted(() => {
@@ -86,15 +144,15 @@ onMounted(() => {
         <!-- 配送时间 -->
         <h3 class="box-title">配送时间</h3>
         <div class="box-body">
-          <a class="my-btn active" href="javascript:;">不限送货时间：周一至周日</a>
-          <a class="my-btn" href="javascript:;">工作日送货：周一至周五</a>
-          <a class="my-btn" href="javascript:;">双休日、假日送货：周六至周日</a>
+          <a class="my-btn" :class="{active:selected1}" @click="change1" href="javascript:;">不限送货时间：周一至周日</a>
+          <a class="my-btn" :class="{active:selected2}" @click="change2" href="javascript:;">工作日送货：周一至周五</a>
+          <a class="my-btn" :class="{active:selected3}" @click="change3" href="javascript:;">双休日、假日送货：周六至周日</a>
         </div>
         <!-- 支付方式 -->
         <h3 class="box-title">支付方式</h3>
         <div class="box-body">
-          <a class="my-btn active" href="javascript:;">在线支付</a>
-          <a class="my-btn" href="javascript:;">货到付款</a>
+          <a class="my-btn" :class="{active:selected4}" @click="change4" href="javascript:;">在线支付</a>
+          <a class="my-btn" :class="{active:selected5}" @click="change5" href="javascript:;">货到付款</a>
           <span style="color:#999">货到付款需付5元手续费</span>
         </div>
         <!-- 金额明细 -->
@@ -121,7 +179,7 @@ onMounted(() => {
         </div>
         <!-- 提交订单 -->
         <div class="submit">
-          <el-button type="primary" size="large" >提交订单</el-button>
+          <el-button type="primary" size="large" @click="createOrder">提交订单</el-button>
         </div>
       </div>
     </div>
