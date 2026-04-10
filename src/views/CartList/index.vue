@@ -1,5 +1,7 @@
 <script setup>
 import { useCartStore } from '@/stores/cartStore';
+import { useRouter } from 'vue-router';
+const router = useRouter()
 const cartStore = useCartStore()
 
 const singleCheck = (i,selected) => {
@@ -55,7 +57,7 @@ const allCheck = (selected) => {
               </td>
               <td class="tc">
                 <p>
-                  <el-popconfirm title="确认删除吗?" confirm-button-text="确认" cancel-button-text="取消" @confirm="delCart(i)">
+                  <el-popconfirm title="确认删除吗?" confirm-button-text="确认" cancel-button-text="取消" @confirm="cartStore.delCart(i)">
                     <template #reference>
                       <a href="javascript:;">删除</a>
                     </template>
@@ -67,7 +69,7 @@ const allCheck = (selected) => {
               <td colspan="6">
                 <div class="cart-none">
                   <el-empty description="购物车列表为空">
-                    <el-button type="primary">随便逛逛</el-button>
+                    <el-button type="primary" @click="router.push('/')">随便逛逛</el-button>
                   </el-empty>
                 </div>
               </td>
@@ -79,7 +81,7 @@ const allCheck = (selected) => {
       <!-- 操作栏 -->
       <div class="action">
         <div class="batch">
-          共 {{ cartStore.selectCount }} 件商品，已选择 2 件，商品合计：
+          共 {{ cartStore.totalCount }} 件商品，已选择 {{ cartStore.selectCount }} 件，商品合计：
           <span class="red">¥ {{ cartStore.selectPrice.toFixed(2) }} </span>
         </div>
         <div class="total">
