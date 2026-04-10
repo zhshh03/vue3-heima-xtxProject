@@ -22,13 +22,20 @@ export const useCartStore = defineStore('cart', () => {
     const item = cartList.value.find(item => item.skuId === skuId)
     item.selected = selected
   }
+
+  const isAll = computed(()=> cartList.value.every(item => item.selected))
+  const allCheck = (select) => {
+    cartList.value.forEach(item=> item.selected = select)
+  }
   return {
     cartList,
     addCart,
     delCart,
     totalCount,
     totalPrice,
-    singleCheck
+    singleCheck,
+    isAll,
+    allCheck
   }
 },{
   persist: true
