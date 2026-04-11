@@ -9,5 +9,13 @@ export const loginAPI = ({account, password}) => {
       password
     }
   })
+}
 
+export const getLikeListAPI = ({ limit = 4 }) => {
+  return httpInstance({
+    url:'/goods/relevant',
+    params: {
+      limit 
+    }
+  })
 }
